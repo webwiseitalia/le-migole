@@ -1,94 +1,134 @@
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
 export default function Contact() {
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.contact-h2 .line', { yPercent: 110 }, {
+        yPercent: 0, duration: 1.2, stagger: 0.1, ease: 'power4.out',
+        scrollTrigger: { trigger: '.contact-h2', start: 'top 88%' },
+      })
+
+      gsap.fromTo('.contact-info-item', { opacity: 0, y: 20 }, {
+        opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: '.contact-info', start: 'top 80%' },
+      })
+
+      gsap.fromTo('.contact-map-wrap', { clipPath: 'inset(0 0 0 100%)' }, {
+        clipPath: 'inset(0 0 0 0%)', duration: 1.4, ease: 'power4.inOut',
+        scrollTrigger: { trigger: '.contact-map-wrap', start: 'top 75%' },
+      })
+
+      gsap.fromTo('.contact-dist', { opacity: 0 }, {
+        opacity: 1, duration: 0.4, stagger: 0.06,
+        scrollTrigger: { trigger: '.contact-distances', start: 'top 90%' },
+      })
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="contatti" className="section-padding bg-cream">
-      <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <p className="text-gold uppercase tracking-[0.3em] text-sm font-sans font-medium mb-3">Dove Siamo</p>
-          <h2 className="heading-display text-4xl sm:text-5xl lg:text-6xl text-charcoal">
-            Vieni a trovarci
+    <section ref={sectionRef} id="contatti" style={{ background: 'var(--color-cream)', paddingTop: 'var(--space-2xl)', paddingBottom: 'var(--space-xl)' }}>
+
+      {/* === Two-column: info left, map right === */}
+      <div
+        className="grid grid-cols-1 lg:grid-cols-2"
+        style={{ minHeight: 'clamp(28rem, 50vh, 40rem)', gap: 0 }}
+      >
+        {/* LEFT — heading + contact info */}
+        <div
+          className="contact-info flex flex-col justify-center"
+          style={{ padding: 'clamp(2rem, 4vw, 4rem) clamp(1.5rem, 5vw, 5rem)' }}
+        >
+          <p className="label" style={{ color: 'var(--color-gold)', marginBottom: 'var(--space-sm)', fontSize: '0.65rem' }}>
+            Dove Siamo
+          </p>
+          <h2 className="contact-h2 fluid-h2" style={{ color: 'var(--color-charcoal)', marginBottom: 'var(--space-lg)' }}>
+            <span className="overflow-hidden block"><span className="line block">Vieni a</span></span>
+            <span className="overflow-hidden block"><span className="line block" style={{ color: 'var(--color-gold)' }}>trovarci</span></span>
           </h2>
-        </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Map */}
-          <div className="aspect-[4/3] lg:aspect-auto lg:min-h-[400px] rounded-sm overflow-hidden shadow-lg">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2758.8!2d11.5095!3d46.2938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4782f8b0a2c7f3a1%3A0x1234567890abcdef!2sVia%20Tresselume%2C%2010%2FA%2C%2038038%20Tesero%20TN!5e0!3m2!1sit!2sit!4v1700000000000"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Le Migole - Mappa"
-            />
-          </div>
+          {/* Contact details */}
+          <div className="flex flex-col gap-5">
+            <div className="contact-info-item" style={{ paddingBottom: 'var(--space-sm)', borderBottom: '1px solid rgba(26,26,26,0.08)' }}>
+              <p className="label" style={{ color: 'var(--color-gold)', marginBottom: '0.4rem', fontSize: '0.6rem' }}>Indirizzo</p>
+              <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.25rem)', color: 'var(--color-charcoal)', lineHeight: 1.4 }}>
+                Via Tresselume, 10/A
+              </p>
+              <p className="font-serif" style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.25rem)', color: 'var(--color-charcoal)', lineHeight: 1.4 }}>
+                38038 Lago di Tesero (TN)
+              </p>
+            </div>
 
-          {/* Info */}
-          <div className="flex flex-col justify-center">
-            <div className="space-y-8">
-              {/* Address */}
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-charcoal rounded-sm flex items-center justify-center">
-                  <svg className="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl text-charcoal mb-1">Indirizzo</h3>
-                  <p className="text-charcoal/60">Via Tresselume, 10/A</p>
-                  <p className="text-charcoal/60">38038 Lago di Tesero (TN)</p>
-                  <p className="text-charcoal/40 text-sm mt-1 italic">
-                    Lungo la ciclabile del Centro Fondo Fiemme
-                  </p>
-                </div>
-              </div>
+            <div className="contact-info-item" style={{ paddingBottom: 'var(--space-sm)', borderBottom: '1px solid rgba(26,26,26,0.08)' }}>
+              <p className="label" style={{ color: 'var(--color-gold)', marginBottom: '0.4rem', fontSize: '0.6rem' }}>Telefono &amp; WhatsApp</p>
+              <a
+                href="tel:+393335344922"
+                className="font-serif block hover:text-[var(--color-gold)] transition-colors duration-300"
+                style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.25rem)', color: 'var(--color-charcoal)' }}
+              >
+                +39 333 534 4922
+              </a>
+            </div>
 
-              {/* Phone */}
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-charcoal rounded-sm flex items-center justify-center">
-                  <svg className="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl text-charcoal mb-1">Telefono & WhatsApp</h3>
-                  <a href="tel:+393335344922" className="text-charcoal/60 hover:text-gold transition-colors">
-                    +39 333 534 4922
-                  </a>
-                </div>
-              </div>
+            <div className="contact-info-item" style={{ paddingBottom: 'var(--space-sm)', borderBottom: '1px solid rgba(26,26,26,0.08)' }}>
+              <p className="label" style={{ color: 'var(--color-gold)', marginBottom: '0.4rem', fontSize: '0.6rem' }}>Email</p>
+              <a
+                href="mailto:info@lemigole.it"
+                className="font-serif block hover:text-[var(--color-gold)] transition-colors duration-300"
+                style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.25rem)', color: 'var(--color-charcoal)' }}
+              >
+                info@lemigole.it
+              </a>
+            </div>
 
-              {/* Email */}
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-charcoal rounded-sm flex items-center justify-center">
-                  <svg className="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-serif text-xl text-charcoal mb-1">Email</h3>
-                  <a href="mailto:info@lemigole.it" className="text-charcoal/60 hover:text-gold transition-colors">
-                    info@lemigole.it
-                  </a>
-                </div>
-              </div>
-
-              {/* Distances */}
-              <div className="pt-6 border-t border-charcoal/10">
-                <h3 className="font-serif text-lg text-charcoal mb-3">Come raggiungerci</h3>
-                <div className="grid grid-cols-2 gap-3 text-sm text-charcoal/50">
-                  <span>Cavalese ~ 5 km</span>
-                  <span>Predazzo ~ 8 km</span>
-                  <span>Moena ~ 15 km</span>
-                  <span>Trento ~ 55 km</span>
-                  <span>Bolzano ~ 55 km</span>
-                </div>
+            {/* Distances */}
+            <div className="contact-info-item contact-distances">
+              <p className="label" style={{ color: 'var(--color-gold)', marginBottom: '0.5rem', fontSize: '0.6rem' }}>
+                Come raggiungerci
+              </p>
+              <p className="font-serif" style={{ color: 'rgba(26,26,26,0.55)', fontStyle: 'italic', fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)', marginBottom: '0.75rem' }}>
+                Lungo la ciclabile del Centro Fondo Fiemme
+              </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {[
+                  'Cavalese ~ 5 km',
+                  'Predazzo ~ 8 km',
+                  'Moena ~ 15 km',
+                  'Trento ~ 55 km',
+                  'Bolzano ~ 55 km',
+                ].map((d, i) => (
+                  <span
+                    key={i}
+                    className="contact-dist"
+                    style={{ color: 'rgba(26,26,26,0.6)', fontFamily: 'var(--font-sans)', fontSize: 'clamp(0.9rem, 1.1vw, 1rem)' }}
+                  >
+                    {d}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
+        </div>
+
+        {/* RIGHT — map */}
+        <div className="contact-map-wrap overflow-hidden" style={{ minHeight: 'clamp(20rem, 45vh, 35rem)' }}>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2758.8!2d11.5095!3d46.2938!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4782f8b0a2c7f3a1%3A0x1234567890abcdef!2sVia%20Tresselume%2C%2010%2FA%2C%2038038%20Tesero%20TN!5e0!3m2!1sit!2sit!4v1700000000000"
+            width="100%"
+            height="100%"
+            style={{ border: 0, minHeight: 'clamp(20rem, 45vh, 35rem)', filter: 'grayscale(0.2) contrast(1.05)' }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Le Migole - Mappa"
+          />
         </div>
       </div>
     </section>
